@@ -17,48 +17,64 @@
          {\phantom{} \hfill Due Date: April 15, 2017} \\
 %%% Header ends
 
-\section{Activity Overview}
 
-I would think it would be very interesting to have an activity where
-we would inject code into a running process, on a Linux system, and
-get it to execute some of our code.
+\section{Activity Overview}
+I think it could be very interesting to have an activity where we would {\bf
+  inject code into a running process}, on a Linux system using {\tt\bf ptrace},
+and get it to execute some of our code.
+
+Arbitrary code execution is a common vulnerability, one specially popular by
+adversaries as it easily exploited and offers a range of possibility, such as an
+reverse shell.
 
 \subsection{Why?}
-
 Use cases for doing this could be reverse engineering, or development
 of debuggers and reverse engineering tools. Also, I believe this gives
 insight into the inner workings of some types of malware.
 
-\subsection{Lessons?}
+For instance, an infected program could inject code into other programs running
+with the same privileges to offer remote access. There are many possibilities
+for combining this activity with the vulnet/worm series.
 
-Students will learn how basic debuggers, using the {\tt ptrace} system
-call, work, and how they and can prevent their processes from being
-hooked in the same way.
+\subsection{Lessons?}
+Students will learn how basic debuggers which uses the {\tt ptrace} system call
+work, and how they and can prevent their processes from being hooked in the same
+way, as form of anti-debuging/anti-instrumentation.
+
+For instance, this provides a good building block to the anti-anti-malware so
+maybe the current activity could include some anti-instrumentation task, as it is
+already quite short.
+
 
 \section{Exercises}
 
-Describe a series of exercises that students will carry out. TODO
+I will write these exercises as an extension to the worm activity, where the
+student will use it's worm implementation and add functionality where it doesn't
+only propagate, but on execution it inject some code into the vulnet program,
+fixing the backdoor and preventing it form being exploited again.
 
 \begin{exercise}
-
-  In this exercise, you do ...
-
+  Make so the worm executes its the binary after propagation. It can be
+  specified that this should only happen on the first target, to make it easier
+  for the TAs to test.
 \end{exercise}
 
 \begin{exercise}
-
-  In this exercise, you do ...
-
+  Locate the process ID ({\tt pid}) of the running vulnet server. This could be
+  done by parsing the {\tt /proc} file system, which has already been explored
+  in the worm activity.
 \end{exercise}
 
 \begin{exercise}
-
-  In this exercise, you do ...
-
+  Using {\tt ptrace} attack to the process and hook the {\tt authenticate} method.
 \end{exercise}
+
+\begin{exercise}
+  Either fix the existing backdoor, or make a new backdoor.
+\end{exercise}
+
 
 \section{Expected Solutions}
-
 I would imagine a solution similar to my referenced article, by user
 called ``PicoFlamingo'' (aka. {\tt 0x00pf})~\cite{0x00sec}, which uses
 around 100 lines of C code.
@@ -67,7 +83,14 @@ The author uses the {\tt ptrace} system call to hook a method in a
 process, locate the process's memory and overwriting its instructions,
 getting it to execute arbitrary code.
 
-Please see reference for more information. TODO
+In our case we would cook vulnet's {\tt authenticate} method. Vulnet's source
+code could be modified to make this even easier, so the hooked function would do
+as little as possible, making it easier to recreate for the worm. For instance,
+the authenticate function could just receive the parameters {\tt username} and
+{\tt password}, and return a boolean value.
+
+Please see reference for more information.
+
 
 \bibliography{references}
 \bibliographystyle{plainnat}
